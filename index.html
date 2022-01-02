@@ -2,18 +2,261 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <Style>
+      * {
+  box-sizing: border-box;
+}
+body{
+  background-color: #FAFAFB;
+}
+.control{
+  height: 45%;
+  width:98%;
+  background-color: #FFFFFF;
+  padding: 10px;
+  position: absolute;
+  top: 55%;
+
+}
+      
+      .column {
+  float: left;
+  width: 48%;
+  background-color: #FFFFFF;
+  padding: 10px;
+  margin: 10px;
+  height: 50vh;
+  /*;*/ /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  height: 50%;
+  padding: 10px;
+}
+
+
+
+    </Style>
     
   </head>
   <body>
-	<button onclick="ch()">button</button>
+
+
+<div id="container" class="container">
+    <div class="row">
+      <div class="column" >
+<br>
+Step1 : Select file <br>
+    <input id="value" type="file" style="padding: 10px;">	
+    <button onclick="ch()" style="background-color: green;">UPLOAD</button>
+    <br>
+    file should be JSON,csv
+
+      </div>
+      <div class="column" style=>
+         <div>
+           Step2:Specify format<br>
+           File Type 
+           <select id="typp">
+             <option>json</option>
+             <option>csv</option>
+           </select>
+           <br>
+           Encoding
+           <select>
+             <option>UTF-8</option>
+           </select>
+           <br>
+           Determiner
+           <select>
+             <option value=",">comma</option>
+           </select>
+           <br>
+            <label >Has Header</label> <input type="checkbox">
+
+         </div>
+      </div>
+    </div>
+
+
+  
+  
+  <div class="control">
+  Step3:Display header<br>
+  Select the field to be displayed<br>
+  <Table>
+    <tr>
+    <th>avilable</th>
+    <th> </th>
+    <th>Display</th>
+    </tr>
+    <tr>
+      <td><select size=10 id="avl" style="width: 100px;">
+        
+      </select></td>
+      <td style="width: 40px;">
+      <button onclick="mov()">>></button>
+      <button onclick="movb()"><<</button>
+      </td>
+      <td><select size=10 id="dd" style="width: 100px;">
+      </select></td>
+    </tr>
+  </Table>
+  <button onclick="next()" style="background-color: green;">button</button>
+  </div>
+</div>
+<div id="shd" style="display: none;">
+<table id="show">
+
+</table>
+  </div>
 <script>
+  
     function ch()
     {
-       console.log("hi");
+       var file=document.getElementById('value').files[0];
+       var str='';
+       str+=readSingleFile(file);
+       console.log(str);
     }
+    function mov()
+    {
+      var a=document.getElementById("avl");
+      var b=document.getElementById("dd");
+      for (i=0;i<a.options.length;i++)
+      {
+        if (a.options[i].selected==true)
+          {
+          console.log(a.options[i].value,i);
+        }
+      }
+      //console.log(a.options[a.selectedIndex].value);
+      var gon=a.options[a.selectedIndex].value;
+      a.remove(a.selectedIndex);
+      var option = document.createElement("option");
+      option.text = gon;
+      //x.add(option);
+      b.add(option);
+      //console.log("hi");
+    }
+
+    function movb()
+    {
+      var b=document.getElementById("avl");
+      var a=document.getElementById("dd");
+      for (i=0;i<a.options.length;i++)
+      {
+        if (a.options[i].selected==true)
+          {
+         // console.log(a.options[i].value,i);
+        }
+      }
+     // console.log(a.options[a.selectedIndex].value);
+      var gon=a.options[a.selectedIndex].value;
+      a.remove(a.selectedIndex);
+      var option = document.createElement("option");
+      option.text = gon;
+      //x.add(option);
+      b.add(option);
+     // console.log("hi");
+    }
+    var r = new FileReader();
+    var s;
+    var avl_list;
+
+  function readSingleFile(fileName) {
+  var f = fileName;
+  var a=document.getElementById("avl");
+  a.innerHTML='';
+  if (f) {
+   // var r = new FileReader();
+    r.onload = function (e) {
+      var contents = e.target.result;
+      console.log(typeof(contents));
+      var ty=document.getElementById("typp");
+      var val='';
+      
+      for (i=0;i<ty.options.length;i++)
+      {
+        if (ty.options[i].selected==true)
+        {
+            val=ty[i].value;
+        }}
+      if (val=='json'){
+      s=JSON.parse(contents);
+     // console.log("ki",s[0]);
+      //console.log(Object.keys(s[0])); 
+      avl_list=Object.keys(s[0]);
+      
+      for (i=0;i<avl_list.length;i++){
+      var option = document.createElement("option");
+      option.text = avl_list[i];
+      //x.add(option);
+      a.add(option);}
+
+      
+      }
+      else{
+        s=contents;
+      }
+     // console.log(s);
+      //document.getElementById("read-content").innerHTML = contents;
+    };
+    r.readAsText(f);
+    //console.log(r);
+  } else {
+    alert("Failed to load file");
+  }
+  function next(){
+//  console.log(r.result);
+  }
+}
+
+
+function next(){
+  console.log(r.result);
+  console.log(s[0]["color"]);
+  console.log(avl_list);
+  var avl_list1=[];
+  var b=document.getElementById("dd");
+      for (i=0;i<b.options.length;i++)
+      {
+          console.log(b.options[i].value,i);
+          avl_list1.push(b.options[i].value);
+        
+      }
+      //container
+      document.getElementById("container").style.display="none";
+      document.getElementById("shd").style.display="block";
+      var show=document.getElementById("show");
+ 
+        var row = show.insertRow(-1);
+      for(i=0;i<avl_list1.length;i++)
+      {
+      
+      var cell1 = row.insertCell(i);
+  cell1.innerHTML = avl_list1[i];
+    }
+
+      for (i=0;i<s.length;i++)
+      {
+  
+        var row = show.insertRow(-1);
+        for(j=0;j<avl_list1.length;j++)
+        {   
+  var cell1 = row.insertCell(j);
+  cell1.innerHTML = s[i][avl_list1[j]];
+    }
+        
+
+      }
+//console.log(show.innerHTML);
+
+}
 </script>  
 </body>
 </html>
